@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 export const Logo = (props) => {
-    console.log(props)
+   
     return (
         <a href="/" className="flex flex-col m-3">
             <h1 className="text-white text-2xl p-0 antialiased font-bold m-0">Tinel</h1>

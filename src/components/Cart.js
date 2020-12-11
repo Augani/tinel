@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { FiShoppingCart } from "react-icons/fi";
 
-export const Cart = ({ cart, newItemAdded, workshops }) => {
-   
+export const Cart = ({ cart, newItemAdded, workshops, cartOpen }) => {
+        
   return (
-    <div className="flex flex-row w-1/2 lg:w-1/3 justify-end lg:mr-0 mr-3 lg:justify-center h-full items-center">
+    <div onClick={()=>cartOpen()} className={`flex flex-row w-1/2 lg:w-1/3 justify-end lg:mr-0 mr-3 lg:justify-center h-full items-center ${cart.length?'pointer':'pointer-events-none'}`}>
       <div className="relative">
         <FiShoppingCart className="text-black text-xl cursor mr-2" />
         {newItemAdded ? (
@@ -24,7 +24,7 @@ const EmptyCart = () => {
   );
 };
 
-Cart.propTypes = {};
+
 
 const mapStateToProps = (state) => ({
   ...state

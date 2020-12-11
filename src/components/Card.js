@@ -5,20 +5,32 @@ import { BiCalendarWeek, BiTime } from "react-icons/bi";
 import { IoBrushOutline } from "react-icons/io5";
 import {FiShoppingCart} from "react-icons/fi";
 import { withRouter } from "react-router-dom";
+import {addToCart} from '../actions'
 
-export const Card = ({ data }) => {
+export const Card = (props) => {
+  const {data} = props;
+  const capture =()=>{
+    let scroll = window.scrollY;
+    localStorage.setItem("scroll", scroll);
+    props.history.push(`/details/${data.id}`)
+  }
+
+  const addToCart = ()=>{
+    props.addToCart(data);
+  }
   return (
     <div
-      className={` relative rounded-md transform transition-all duration-300  shadow-2xl w-full flex flex-row lg:flex-col`}
+      className={` relative rounded-md transform transition-all duration-300  shadow-2xl w-5/6 flex flex-row lg:flex-col`}
     >
       <section className="w-2/5 lg:w-full flex-grow overflow-hidden flex flex-col mb-3 rounded-l-md lg:rounded-t-md lg:h-40">
-     <a href={`/details/${data.id}`}>
+   
      <img
         alt="Workshop"
         src={data.imageUrl}
-        className=" object-cover"
+        onClick={capture}
+        className=" object-cover cursor-pointer"
       />
-     </a>
+     
       </section>
       <section className="w-3/5 lg:w-full flex flex-col  px-4 lg:px-10 py-6 min-h-full relative">
         <div className="absolute z-10 -left-7  lg:right-1 lg:left-auto  top-3 lg:-top-6 shadow-xl bg-black h-10 w-10 flex flex-col items-center justify-center rounded-md right-4">
@@ -37,7 +49,7 @@ export const Card = ({ data }) => {
           </p>
         </div>
         <div className="w-full mb-3 flex flex-col px-2">
-          <h3 className="lg:text-2xl text-xl text-blue-400 font-black"><a href={`/details/${data.id}`}>{data.title}</a></h3>
+          <h3 className="lg:text-2xl text-xl text-blue-400 font-black"><a onClick={capture} href={`/details/${data.id}`}>{data.title}</a></h3>
         </div>
         <div className="w-full mb-3 flex flex-col px-2">
           <h3 className="text-2xl lg:text-3xl tracking-tight text-gray-800 font-black">
@@ -46,7 +58,7 @@ export const Card = ({ data }) => {
           </h3>
         </div>
         <div className="w-full hidden lg:flex flex-col items-center px-2">
-          <button className="uppercase text-center w-full hover:bg-yellow-500 bg-yellow-400 shadow-xl rounded-md h-10 lg:h-14 text-black font-bold tracking-wider">
+          <button onClick={addToCart} className="uppercase text-center w-full hover:bg-yellow-500 bg-yellow-400 shadow-xl rounded-md h-10 lg:h-14 text-black font-bold tracking-wider">
             Add to cart
           </button>
         </div>
@@ -58,20 +70,16 @@ export const Card = ({ data }) => {
   );
 };
 
-Card.propTypes = {
-  image: PropTypes.string,
-  categoryIcon: PropTypes.func,
-  date: PropTypes.string,
-  time: PropTypes.string,
-  title: PropTypes.string,
-  price: PropTypes.number,
-  currency: PropTypes.string,
-};
+
 
 const mapStateToProps = (state) => ({
-  ...state,
+  ...state
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  addToCart
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Card));
+const ECard = connect(mapStateToProps, mapDispatchToProps)(withRouter(Card))
+
+export default ECard;

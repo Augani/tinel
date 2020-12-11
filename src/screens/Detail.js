@@ -7,8 +7,9 @@ import { GetRequest } from "../Request";
 import { addWorkshops, addCategories, viewWorkshop } from "../actions";
 import { Side } from "../components/Side";
 import { withRouter } from "react-router-dom";
-import { BiCalendarWeek, BiTime } from "react-icons/bi";
+import { BiCalendarWeek, BiTime, BiArrowBack } from "react-icons/bi";
 import { IoBrushOutline } from "react-icons/io5";
+
 
 export const Detail = (props) => {
   console.log(props);
@@ -16,6 +17,7 @@ export const Detail = (props) => {
   const [WorskopData, setWorkShopData] = React.useState({});
   const [user, setUser] = React.useState("");
   const [Total, setTotal] = React.useState(0);
+  const [similar, setSimilar] = React.useState([]);
 
   const fetchUser = (userId) => {
     GetRequest(`/users/${userId}`)
@@ -33,6 +35,7 @@ export const Detail = (props) => {
         props.viewWorkshop(ret);
         setWorkShopData(ret);
         fetchUser(ret.userId);
+        findSimilar(ret);
       })
       .catch((e) => {
         console.log(e);
@@ -42,12 +45,25 @@ export const Detail = (props) => {
   const calculate = (r)=>{
       setTotal(WorskopData.price * r.target.value);
   }
+
+  const findSimilar =(workshop)=>{
+    let sim = props.workshops.filter(o=>o.category === workshop.category && o.id !== workshop.id);
+    setSimilar(sim);
+  }
+
+  const goBack = ()=>{
+    props.history.goBack();
+  }
   return (
     <div className="w-screen h-screen flex flex-col font-sans">
       <Nav />
       <main className="w-full grid grid-cols-1 lg:grid-cols-4 overflow-x-hidden">
         <header className="col-span-4 h-10"></header>
-        <aside className="col-span-1 h-full"></aside>
+        <aside className="col-span-1 h-full flex flex-col px-4">
+          <button className="flex flex-row items-center focus:outline-none" onClick={goBack}>
+              <BiArrowBack className="text-lg mr-1"/> <span className="text-lg">Back</span>
+          </button>
+        </aside>
         <section className="col-span-3 flex flex-col px-4">
           <div className="w-full h-52 overflow-y-hidden mb-3 rounded-lg">
             <img
@@ -118,10 +134,29 @@ export const Detail = (props) => {
             </div>
           </section>
         </section>
+        {similar.length?<SWorkshops data={similar}/>:null}
       </main>
+                      
     </div>
   );
 };
+
+const SWorkshops = ({data})=>{
+  console.log(data)
+  return (
+    <section className="col-span-4 grid grid-cols-4 bg-gray-100">
+      <div className="col-span-1">
+
+      </div>
+      <div className="col-span-3 flex flex-col">
+        <div className="w-full py-4">
+          <h1 className="font-bold tracking-wider text-4xl">Similar workshops</h1>
+        </div>
+        <List list={data} />
+      </div>
+    </section>
+  )
+}
 
 const mapStateToProps = (state) => ({
   ...state,

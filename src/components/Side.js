@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import { BsCode, BsReverseLayoutTextWindowReverse, BsLightning } from "react-icons/bs";
 import { IoBrushOutline } from "react-icons/io5";
 
-export const Side = (props) => {
+const Side = (props) => {
   return (
-    <div className={`w-full h-full flex fixed flex-col pl-2 ${props.className}`}>
-      <h2 className="font-semibold text-gray-700 mb-3 pl-4 w-full">
+    <div className={`w-full h-full flex fixed flex-col ${props.className}`}>
+      <h2 className="font-semibold text-gray-700 mb-3 w-full">
         Filter by category:
       </h2>
       <ul className="w-full flex flex-col pl-4">
